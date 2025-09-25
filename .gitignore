@@ -1,0 +1,63 @@
+# Node modules
+/node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build directories
+/dist
+/build
+/.next
+/out
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Optional npm cache
+.npm
+.yarn-integrity
+.pnp.*
+
+# Mac system files
+.AppleDouble
+.LSOverride
+
+# Temporary files
+*.swp
+*.swo
+*.tmp
+
+# EJS templates - usually you commit these, but if you have compiled EJS output
+/public/templates_compiled/
+
+# Optional: coverage reports
+coverage/
+*.lcov
+
+# Optional: debug folders
+/debug/

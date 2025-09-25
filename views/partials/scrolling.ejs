@@ -1,0 +1,23 @@
+<script>
+  const commentIcon = document.getElementById('scroll-to-comments');
+  const commentSection = document.querySelector(".commentDiv1");
+
+  commentIcon.addEventListener('click', () => {
+    commentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  const backToTopBtn = document.getElementById('back-to-top');
+
+  // Show button when scrolled down
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      backToTopBtn.style.display = 'block';
+    } else {
+      backToTopBtn.style.display = 'none';
+    }
+  });
+
+  // Scroll smoothly to top when clicked
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>

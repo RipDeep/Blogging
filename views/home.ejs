@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>HomePage</title>
+    <style>
+      .blog-card {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .blog-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .blog-card .card-img-top {
+        height: 160px;
+        object-fit: cover;
+      }
+
+      .blog-card .card-body {
+        padding: 0.75rem 1rem;
+      }
+
+      .blog-card .card-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .blog-card .btn {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.7rem;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/nav') %>
+    <div class="container mt-4">
+      <div class="row g-4">
+        <% blogs.forEach(blog => { %>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card blog-card h-100">
+            <img
+              src="<%= blog.coverImageURL %>"
+              class="card-img-top"
+              alt="<%= blog.title %>"
+            />
+            <div class="card-body">
+              <h5 class="card-title"><%= blog.title %></h5>
+              <a href="/blog/<%= blog._id %>" class="btn btn-primary btn-sm"
+                >View</a
+              >
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title><%= blog.title %></title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.7;
+        background: #f9f9f9;
+        color: #222;
+      }
+
+      /* Container */
+      .blog-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Title */
+      .blog-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      /* Content layout */
+      .blog-content {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        width: 100%;
+      }
+
+      /* Image + details wrapper */
+      .outter-div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .blog-cover-wrapper {
+        width: 100%;
+        max-width: 600px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .blog-cover-wrapper img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .blog-cover-wrapper img:hover {
+        transform: scale(1.03);
+      }
+
+      /* Date */
+      .blog-date {
+        font-size: 0.9rem;
+        color: #888;
+        font-style: italic;
+      }
+
+      /* Author + interactions row */
+      .details {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .profileImageOutterDiv {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .profileImage {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        object-fit: cover;
+      }
+
+      .post-interactions {
+        display: flex;
+        gap: 15px;
+      }
+
+      .post-interactions div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        color: #555;
+        transition: color 0.2s;
+      }
+
+      .post-interactions div:hover {
+        color: #0d6efd;
+      }
+
+      .post-interactions i {
+        font-size: 1.1rem;
+      }
+
+      /* Blog body */
+      .blog-text {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+
+      .blog-body {
+        font-size: 1.05rem;
+        color: #444;
+        text-align: justify;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        max-width: 800px;
+      }
+
+      /* Back button */
+      .back-btn {
+        display: inline-block;
+        padding: 0.6rem 1.4rem;
+        background-color: #0d6efd;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        margin-top: 30px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background-color: #084298;
+        transform: translateY(-2px);
+      }
+
+      /* Comments */
+      .commentDiv {
+        width: 100%;
+        max-width: 800px;
+        margin-top: 40px;
+      }
+      .commentDiv1 {
+        width: 96%;
+        max-width: 800px;
+        margin-top: 40px;
+      }
+
+      .commentDiv h3 {
+        margin-bottom: 15px;
+        text-align: left;
+      }
+
+      .commentInput {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+
+      .commentBtn {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+      }
+
+      .comments-section {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .comment-card {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        border-radius: 10px;
+        padding: 12px 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .comment-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .comment-author {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .comment-date {
+        font-size: 0.8rem;
+        color: #888;
+      }
+
+      .comment-content {
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #444;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+
+      .no-comments {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background: #f9fafb; /* light background */
+        border: 1px dashed #ccc; /* subtle border */
+        border-radius: 10px;
+        font-family: "Segoe UI", sans-serif;
+        color: #555;
+      }
+
+      .no-comments p {
+        font-size: 1rem;
+        font-style: italic;
+        margin: 0;
+      }
+      #back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 100;
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: none; /* Hidden by default */
+        transition: background-color 0.3s, transform 0.3s;
+      }
+
+      #back-to-top:hover {
+        background-color: #084298;
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 992px) {
+        .commentDiv {
+          position: absolute;
+          top: 100%;
+          display: none;
+        }
+      }
+      @media (min-width: 992px) {
+        .commentDiv1 {
+          position: absolute;
+          top: 100%;
+          display: none;
+        }
+      }
+
+      /* Responsive */
+      @media (min-width: 992px) {
+        .blog-content {
+          flex-direction: row;
+          align-items: flex-start;
+        }
+        .outter-div {
+          flex: 1;
+          align-items: flex-start;
+        }
+        .blog-text {
+          flex: 1;
+          margin-left: 30px;
+          justify-content: flex-start;
+        }
+        .blog-body {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="blog-container">
+      <h1 class="blog-title"><%= blog.title %></h1>
+
+      <div class="blog-content">
+        <!-- Left side: image + details -->
+        <div class="outter-div">
+          <div class="blog-cover-wrapper">
+            <img src="<%= blog.coverImageURL %>" alt="<%= blog.title %>" />
+          </div>
+
+          <p class="blog-date">
+            Posted on <%= new Date(blog.createdAt).toDateString().slice(4) %> by
+            <%= blog.createdBy.fullName %>
+          </p>
+
+          <div class="details">
+            <div class="profileImageOutterDiv">
+              <img
+                src="<%= blog.createdBy.profileImageURL %>"
+                alt="author"
+                class="profileImage"
+              />
+              <h6><%= blog.createdBy.fullName %></h6>
+            </div>
+
+            <div class="post-interactions">
+              <form action="/blog/like/<%= blog._id %>" method="post">
+                <div class="like" id="like-btn" data-blog-id="<%= blog._id %>">
+                  <button class="btn btn-sm commentBtn" type="submit">
+                    <i
+                      class="fa-regular fa-thumbs-up <%= likes.some(l => l.createdBy._id.toString() === user?._id.toString()) ? 'fa-solid text-primary' : 'fa-regular' %>"
+                    >
+                    </i>
+                  </button>
+                  <span class="like-count"><%= likes.length %></span>
+                </div>
+              </form>
+              <div class="comment" id="scroll-to-comments">
+                <i class="fa-regular fa-comment"></i>
+                <span class="comment-count"><%= comments.length %></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comments -->
+          <div class="commentDiv">
+            <h3>Comments</h3>
+            <% if (locals.user) { %>
+            <form action="/blog/comment/<%= blog._id %>" method="post">
+              <div class="mb-3 d-flex">
+                <input
+                  type="text"
+                  name="content"
+                  class="form-control commentInput"
+                  placeholder="Enter your comment..."
+                />
+                <button class="btn btn-sm commentBtn btn-primary" type="submit">
+                  Add
+                </button>
+              </div>
+            </form>
+            <% } %>
+
+            <div class="comments-section">
+              <% if (comments.length === 0) { %>
+              <div class="no-comments">
+                <p>No comments yet. Be the first to share your thoughts</p>
+              </div>
+              <% } %> <% comments.forEach(comment => { %>
+              <div class="comment-card">
+                <div class="d-flex align-items-center gap-2">
+                  <img
+                    src="<%= comment.createdBy.profileImageURL %>"
+                    alt="profile"
+                    class="profileImage"
+                  />
+                  <div>
+                    <h6 class="comment-author">
+                      <%= comment.createdBy.fullName %>
+                    </h6>
+                    <span class="comment-date"
+                      ><%= comment.createdAt.toDateString() %></span
+                    >
+                  </div>
+                </div>
+                <pre class="comment-content"><%= comment.content %></pre>
+              </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right side: blog body -->
+        <div class="blog-text">
+          <pre class="blog-body"><%= blog.body %></pre>
+        </div>
+      </div>
+
+      <a href="/" class="back-btn">← Back to Home</a>
+      <!-- Comments -->
+      <div class="commentDiv1">
+        <h3>Comments</h3>
+        <% if (locals.user) { %>
+        <form action="/blog/comment/<%= blog._id %>" method="post">
+          <div class="mb-3 d-flex">
+            <input
+              type="text"
+              name="content"
+              class="form-control commentInput"
+              placeholder="Enter your comment..."
+            />
+            <button class="btn btn-sm commentBtn btn-primary" type="submit">
+              Add
+            </button>
+          </div>
+        </form>
+        <% } %>
+
+        <div class="comments-section">
+          <% if (comments.length === 0) { %>
+          <div class="no-comments">
+            <p>No comments yet. Be the first to share your thoughts</p>
+          </div>
+          <% } %> <% comments.forEach(comment => { %>
+          <div class="comment-card">
+            <div class="d-flex align-items-center gap-2">
+              <img
+                src="<%= comment.createdBy.profileImageURL %>"
+                alt="profile"
+                class="profileImage"
+              />
+              <div>
+                <h6 class="comment-author">
+                  <%= comment.createdBy.fullName %>
+                </h6>
+                <span class="comment-date"
+                  ><%= comment.createdAt.toDateString() %></span
+                >
+              </div>
+            </div>
+            <pre class="comment-content"><%= comment.content %></pre>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Back to Top Button -->
+      <button id="back-to-top" title="Go to top">↑</button>
+    </div>
+
+    <%- include('./partials/scripts') %> <%- include('./partials/scrolling') %>
+  </body>
+</html>
