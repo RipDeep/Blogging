@@ -7,17 +7,32 @@ const Like = require("../models/like");
 
 const router = Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(`./public/uploads`));
-  },
-  filename: function (req, file, cb) {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    cb(null, fileName);
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, path.resolve(`./public/uploads`));
+//   },
+//   filename: function (req, file, cb) {
+//     const fileName = `${Date.now()}-${file.originalname}`;
+//     cb(null, fileName);
+//   },
+// });
+
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads',
+    format: async (req, file) => 'png', // or keep original
+    public_id: (req, file) => Date.now() + '-' + file.originalname,
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
+
+
+// const upload = multer({ storage: storage });
 
 router.get("/add-new", (req, res) => {
   return res.render("addBlog", {
