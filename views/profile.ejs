@@ -15,7 +15,7 @@
       }
 
       .profile-container {
-        max-width: 900px;
+        max-width: 95vw;
         margin: 50px auto;
         padding: 0 20px;
         display: flex;
@@ -212,46 +212,23 @@
         </form>
         <% } %>
 
-        <div class="total-posts">Total Posts: <%= totalPosts %></div>
+        <div class="total-posts">Total Posts: <%= totalPosts %> </div>
       </div>
 
       <!-- User Posts -->
       <div class="user-posts">
-        <!-- Post 1 -->
+        <% userPosts.forEach(post=> { %>
         <div class="post-card">
           <img
-            src="https://picsum.photos/400/200?random=1"
+            src="<%= post.coverImageURL %>"
             alt="Post Title 1"
           />
           <div class="post-body">
-            <div class="post-title">My First Blog Post</div>
-            <a href="#">Read More</a>
+            <div class="post-title"><%=post.title %> </div>
+            <a href="/blog/<%= post._id %>" class="btn btn-primary btn-sm">View</a>
           </div>
         </div>
-
-        <!-- Post 2 -->
-        <div class="post-card">
-          <img
-            src="https://picsum.photos/400/200?random=2"
-            alt="Post Title 2"
-          />
-          <div class="post-body">
-            <div class="post-title">Exploring Modern Web Design</div>
-            <a href="#">Read More</a>
-          </div>
-        </div>
-
-        <!-- Post 3 -->
-        <div class="post-card">
-          <img
-            src="https://picsum.photos/400/200?random=3"
-            alt="Post Title 3"
-          />
-          <div class="post-body">
-            <div class="post-title">Tips for Writing Engaging Content</div>
-            <a href="#">Read More</a>
-          </div>
-        </div>
+        <% }); %>
       </div>
     </div>
 
