@@ -6,12 +6,11 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const fileuplod = require("express-fileupload");
 
-
 const Blog = require("./models/blog");
 
 const userRoute = require("./routes/user");
 const blogRoute = require("./routes/blog");
-
+const profileRoute = require("./routes/profile");
 
 const {
   checkForAuthenticationCookie,
@@ -41,13 +40,13 @@ app.use(checkForAuthenticationCookie("token"));
 //   next();
 // });
 app.use(express.static(path.resolve("./public")));
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
-app.use(fileuplod({
-  useTempFiles: true,
-  tempFileDir: "/tmp/"
-}));
-
-
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+app.use(
+  fileuplod({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 
 app.get("/", async (req, res) => {
   const allBlog = await Blog.find({});
@@ -59,6 +58,7 @@ app.get("/", async (req, res) => {
 
 app.use("/user", userRoute);
 app.use("/blog", blogRoute);
+app.use("/profile", profileRoute);
 
 app.listen(PORT, () => {
   console.log("Server started at ", PORT);

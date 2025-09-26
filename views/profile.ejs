@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+      <%- include('./partials/head') %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>John Doe's Profile</title>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4ebf1 100%);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      color: #1a1c21;
+    }
+
+    .profile-container {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .profile-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 400px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ddd;
+      margin-bottom: 15px;
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .followers {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .user-posts {
+      width: 100%;
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .post-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .post-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .post-card .post-body {
+      padding: 15px;
+      flex: 1;
+    }
+
+    .post-card .post-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #1a1c21;
+    }
+
+    .post-card a {
+      text-decoration: none;
+      background: linear-gradient(135deg, #4f46e5, #3b82f6);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .post-card a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(63, 81, 181, 0.3);
+      background: linear-gradient(135deg, #4338ca, #2563eb);
+    }
+  </style>
+</head>
+<body>
+ <%- include('./partials/nav') %>
+  <div class="profile-container">
+    <!-- User Profile -->
+    <div class="profile-card">
+      <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile Picture" class="profile-pic" />
+      <div class="profile-name">John Doe</div>
+      <div class="followers">58 Followers</div>
+    </div>
+
+    <!-- User Posts -->
+    <div class="user-posts">
+      <!-- Post 1 -->
+      <div class="post-card">
+        <img src="https://picsum.photos/400/200?random=1" alt="Post Title 1" />
+        <div class="post-body">
+          <div class="post-title">My First Blog Post</div>
+          <a href="#">Read More</a>
+        </div>
+      </div>
+
+      <!-- Post 2 -->
+      <div class="post-card">
+        <img src="https://picsum.photos/400/200?random=2" alt="Post Title 2" />
+        <div class="post-body">
+          <div class="post-title">Exploring Modern Web Design</div>
+          <a href="#">Read More</a>
+        </div>
+      </div>
+
+      <!-- Post 3 -->
+      <div class="post-card">
+        <img src="https://picsum.photos/400/200?random=3" alt="Post Title 3" />
+        <div class="post-body">
+          <div class="post-title">Tips for Writing Engaging Content</div>
+          <a href="#">Read More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('./partials/scripts') %>
+
+</body>
+</html>
