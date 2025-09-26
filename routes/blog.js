@@ -9,6 +9,7 @@ const cloudinary = require("cloudinary").v2;
 const router = Router();
 
 
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -29,6 +30,7 @@ router.get("/:id", async (req, res) => {
   const likes = await Like.find({ blogId: req.params.id }).populate(
     "createdBy"
   );
+  console.log("req.user:", req.user);
 
   return res.render("blog", {
     user: req.user,
@@ -39,6 +41,8 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/comment/:blogId", async (req, res) => {
+  
+
   await Comment.create({
     content: req.body.content,
     blogId: req.params.blogId,

@@ -36,12 +36,17 @@ app.set("views", path.resolve("./views"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
+// app.use((req, res, next) => {
+//   res.locals.user = req.user; // now home page and navbar can access user
+//   next();
+// });
 app.use(express.static(path.resolve("./public")));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use(fileuplod({
   useTempFiles: true,
   tempFileDir: "/tmp/"
 }));
+
 
 
 app.get("/", async (req, res) => {

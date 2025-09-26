@@ -3,3 +3,19 @@
   integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
   crossorigin="anonymous"
 ></script>
+<script>
+  // get the cookie value
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+
+  let username = getCookie("usernameBlogify");
+
+  if (username) {
+    // decode %20 to spaces
+    username = decodeURIComponent(username);
+    document.getElementById("username-display").innerText = username;
+  }
+</script>

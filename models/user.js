@@ -71,7 +71,7 @@ userSchema.static("matchPasswordAndGenerateToken", async function (email, passwo
 
   const token = createTokenForUser(user);
 
-  return token;
+  return { token, user };
 });
 
 const User = model("user", userSchema);
