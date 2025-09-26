@@ -370,11 +370,13 @@
               <% } %> <% comments.forEach(comment => { %>
               <div class="comment-card">
                 <div class="d-flex align-items-center gap-2">
+                  <a href="/profile/view/<%= comment.createdBy._id %>">
                   <img
                     src="<%= comment.createdBy.profileImageURL %>"
                     alt="profile"
                     class="profileImage"
                   />
+                  </a>
                   <div>
                     <h6 class="comment-author">
                       <%= comment.createdBy.fullName %>
@@ -425,11 +427,13 @@
           <% } %> <% comments.forEach(comment => { %>
           <div class="comment-card">
             <div class="d-flex align-items-center gap-2">
+              <a href="/profile/view/<%= comment.createdBy._id %>">
               <img
                 src="<%= comment.createdBy.profileImageURL %>"
                 alt="profile"
                 class="profileImage"
               />
+            </a>
               <div>
                 <h6 class="comment-author">
                   <%= comment.createdBy.fullName %>

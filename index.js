@@ -17,7 +17,7 @@ const {
 } = require("./middlewares/authentication");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 mongoose
   .connect(process.env.MONGO_URL)

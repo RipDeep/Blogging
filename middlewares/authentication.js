@@ -14,6 +14,9 @@ function checkForAuthenticationCookie(cookieName) {
       const userDetails = await User.findById(userPayload._id);
       res.cookie("usernameBlogify", userDetails.fullName)
 
+      console.log("userPayload from auth middleware:", userPayload);
+      
+
       req.user = userPayload;
     } catch (error) {
       if (!error) {

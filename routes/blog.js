@@ -40,6 +40,7 @@ router.get("/:id", async (req, res) => {
   });
 });
 
+
 router.post("/comment/:blogId", async (req, res) => {
   
 
@@ -102,5 +103,7 @@ router.post("/add-new", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
 
 module.exports = router;
