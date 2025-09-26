@@ -4,6 +4,41 @@
     <%- include('./partials/head') %>
     <title>HomePage</title>
     <style>
+      body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #1a1c21;
+
+  /* Combined gradient + pattern overlay */
+  background: 
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.05) 25%, 
+      transparent 25%
+    ),
+    linear-gradient(
+      225deg,
+      rgba(255, 255, 255, 0.05) 25%, 
+      transparent 25%
+    ),
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.05) 25%, 
+      transparent 25%
+    ),
+    linear-gradient(
+      315deg,
+      rgba(255, 255, 255, 0.05) 25%, 
+      #ffffff 25%
+    ),
+    linear-gradient(135deg, #b9b8b7 0%, #ffffff 100%);
+    
+  background-size: 60px 60px;
+  background-repeat: repeat;
+}
+
+
       .blog-card {
         border-radius: 12px;
         overflow: hidden;
@@ -40,7 +75,7 @@
   <body>
     <%- include('./partials/nav') %>
     <div class="container mt-4">
-      <div class="row g-4">
+      <div class="row g-4 mb-4">
         <% blogs.forEach(blog => { %>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
           <div class="card blog-card h-100">

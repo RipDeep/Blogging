@@ -3,46 +3,117 @@
   <head>
     <%- include('./partials/head') %>
     <title>Add New Blog</title>
+
+    <style>
+      body {
+        background: #f5f7fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url('https://images.pexels.com/photos/12658065/pexels-photo-12658065.jpeg');
+      }
+
+      /* https://images.pexels.com/photos/24778046/pexels-photo-24778046.jpeg */
+
+      .form-container {
+        max-width: 650px;
+        margin: 50px auto;
+        background: #ffffff94;
+        
+        border-radius: 1rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        padding: 2rem;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .form-container:hover {
+        transform: translateY(-3px);
+      }
+
+      .form-control {
+        border-radius: 0.75rem;
+        border: 1px solid #e0e0e0;
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .form-control:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25);
+      }
+
+      label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      textarea {
+        min-height: 150px;
+      }
+
+      .btn-modern {
+        background: linear-gradient(135deg, #4f46e5, #3b82f6);
+        border: none;
+        border-radius: 0.75rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fff;
+        width: 100%;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .btn-modern:hover {
+        background: linear-gradient(135deg, #4338ca, #2563eb);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+      }
+    </style>
   </head>
   <body>
     <%- include('./partials/nav') %>
 
-    <div class="container mt-3">
-      <form action="/blog/add-new" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-          <label for="coverImage" class="form-label">Cover Image</label>
-          <input
-            type="file"
-            class="form-control"
-            id="coverImage"
-            name="coverImage"
-            accept="image/*"
-            aria-describedby="coverImage"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="title" class="form-label">Title</label>
-          <input
-            type="text"
-            class="form-control"
-            id="title"
-            name="title"
-            aria-describedby="title"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="body" class="form-label">Body</label>
-          <textarea
-            class="form-control"
-            aria-label="With textarea"
-            id="body"
-            name="body"
-          ></textarea>
-        </div>
-        <div class="mb-3">
-          <button class="btn btn-primary" type="submit">Submit</button>
-        </div>
-      </form>
+    <div class="container">
+      <div class="form-container">
+        <h2 class="mb-4 text-center fw-bold " style="color:rgb(26, 28, 33);" > Add New Blog</h2>
+        <form action="/blog/add-new" method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="coverImage" class="form-label">Cover Image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="coverImage"
+              name="coverImage"
+              accept="image/*"
+              aria-describedby="coverImage"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              placeholder="Enter your blog title"
+              aria-describedby="title"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="body" class="form-label">Body</label>
+            <textarea
+              class="form-control"
+              aria-label="With textarea"
+              id="body"
+              name="body"
+              placeholder="Write your blog content here..."
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-modern" type="submit">Publish Blog</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <%- include('./partials/scripts') %>
