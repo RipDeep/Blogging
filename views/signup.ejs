@@ -2,51 +2,289 @@
 <html lang="en">
   <head>
     <%- include('./partials/head') %>
-    
     <title>Signup</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* background: linear-gradient(135deg, #e0e7ff, #f0f4ff); */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+
+        background-color: #1e3a8a; /* Dark blue base */
+        background-image: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 25%,
+            transparent 25%
+          ),
+          linear-gradient(225deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+          linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+          linear-gradient(315deg, rgba(255, 255, 255, 0.1) 25%, #1e3a8a 25%);
+        background-size: 60px 60px;
+        background-repeat: repeat;
+      }
+
+      .signup-container {
+        margin: 50px 0;
+        background: #ffffffee;
+        padding: 2.5rem 2rem;
+        border-radius: 20px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 420px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .signup-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .signup-title {
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e1e2f;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        border-radius: 12px;
+        border: 1px solid #d1d5db;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.2);
+      }
+
+      label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.25rem;
+        display: block;
+      }
+
+      .form-text {
+        font-size: 0.85rem;
+        color: #6b7280;
+        margin-top: -0.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .btn-modern {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        border: none;
+        color: #fff;
+        background: linear-gradient(135deg, #4f46e5, #3b82f6);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-modern:hover {
+        background: linear-gradient(135deg, #4338ca, #2563eb);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(63, 81, 181, 0.3);
+      }
+
+      .login-link {
+        text-align: center;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #4f46e5;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .login-link:hover {
+        text-decoration: underline;
+        color: #4338ca;
+      }
+
+      /* Loader Overlay */
+      .loader-overlay {
+        display: none; /* hidden initially */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(3px);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .loader-box {
+        background: #fff;
+        padding: 40px 60px;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .spinner {
+        width: 60px;
+        height: 60px;
+        border: 6px solid #e0e0e0;
+        border-top: 6px solid #4f46e5;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loader-box p {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .loader-box .dots::after {
+        content: "";
+        display: inline-block;
+        width: 0.6em;
+        animation: blink 1s infinite steps(1);
+      }
+
+      @keyframes blink {
+        0%,
+        20% {
+          content: "";
+        }
+        40% {
+          content: ".";
+        }
+        60% {
+          content: "..";
+        }
+        80%,
+        100% {
+          content: "...";
+        }
+      }
+    </style>
   </head>
+
   <body>
     <%- include('./partials/nav') %>
 
-    <div class="container mt-4">
-      <form action="/user/signup" method="post" >
+    <div class="signup-container">
+      <div class="signup-title">Create Account</div>
+      <form id="signupForm" action="/user/signup" method="post">
         <div class="mb-3">
-          <label for="fullName" class="form-label">Full Name</label>
+          <label for="fullName">Full Name</label>
           <input
             type="text"
             name="fullName"
             class="form-control"
             id="fullName"
-            aria-describedby="fullName"
+            placeholder="John Doe"
+            required
           />
         </div>
+
         <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label"
-            >Email address</label
-          >
+          <label for="email">Email Address</label>
           <input
             type="email"
             name="email"
             class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
+            id="email"
+            placeholder="example@email.com"
+            required
           />
-          <div id="emailHelp" class="form-text">
+          <div class="form-text">
             We'll never share your email with anyone else.
           </div>
         </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
+
+        <div class="mb-3" style="position: relative">
+          <label for="password">Password</label>
           <input
-            name="password"
             type="password"
+            name="password"
             class="form-control"
-            id="exampleInputPassword1"
+            id="password"
+            placeholder="Enter a strong password"
+            required
           />
+          <!-- Eye icon for toggle -->
+          <span
+            id="togglePassword"
+            style="
+              position: absolute;
+              right: 15px;
+              top: 38px;
+              cursor: pointer;
+              font-size: 1.1rem;
+              color: #6b7280;
+            "
+            >👁️</span
+          >
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <button type="submit" class="btn-modern">Sign Up</button>
       </form>
+
+      <div class="login-link">
+        Already have an account? <a href="/user/signin">Login</a>
+      </div>
     </div>
+
+    <!-- Loader Overlay -->
+    <div id="loader" class="loader-overlay">
+      <div class="loader-box">
+        <div class="spinner"></div>
+        <p>Creating your account<span class="dots">...</span></p>
+      </div>
+    </div>
+
+    <script>
+      // Loader logic
+      const form = document.getElementById("signupForm");
+      const loader = document.getElementById("loader");
+
+      form.addEventListener("submit", () => {
+        loader.style.display = "flex"; // show loader
+      });
+
+      // Show/Hide password logic
+      const passwordInput = document.getElementById("password");
+      const togglePassword = document.getElementById("togglePassword");
+
+      togglePassword.addEventListener("click", () => {
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+        togglePassword.textContent = type === "password" ? "👁️" : "🙈";
+      });
+    </script>
 
     <%- include('./partials/scripts') %>
   </body>

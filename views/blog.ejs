@@ -316,12 +316,16 @@
 
           <div class="details">
             <div class="profileImageOutterDiv">
+              <a class="profiledirect" href="/profile/view/<%= blog.createdBy._id %>">
               <img
                 src="<%= blog.createdBy.profileImageURL %>"
                 alt="author"
                 class="profileImage"
-              />
+              /></a>
+              <a class="profiledirect" href="/profile/view/<%= blog.createdBy._id %>">
               <h6><%= blog.createdBy.fullName %></h6>
+              </a>
+              
             </div>
 
             <div class="post-interactions">
@@ -435,9 +439,11 @@
               />
             </a>
               <div>
+                <a class="profiledirect" href="/profile/view/<%= comment.createdBy._id %>">
                 <h6 class="comment-author">
                   <%= comment.createdBy.fullName %>
                 </h6>
+                </a>
                 <span class="comment-date"
                   ><%= comment.createdAt.toDateString() %></span
                 >

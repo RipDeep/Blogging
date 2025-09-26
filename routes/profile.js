@@ -1,8 +1,15 @@
 const { Router } = require("express");
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const cloudinary = require("cloudinary").v2;
 
 const router = Router();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Profile page
 router.get("/", async (req, res) => {
@@ -90,6 +97,43 @@ router.post("/follow/:id", async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).send("Server error");
+  }
+});
+
+router.post("/update", async (req, res) => {
+  try {
+    const userId = req.user._id; // logged in user
+
+    let updateData = {
+      fullName: req.body.username, // from your form
+    };
+
+    // If a new profile image is uploaded
+    if (req.files && req.files.profileImage) {
+      const file = req.files.profileImage;
+
+      // Upload to cloudinary
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "profile_uploads",
+      });
+
+      updateData.profileImageURL = result.secure_url;
+    }
+
+    // Update user in DB
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      updateData,
+      { new: true }
+    );
+
+    console.log("Updated User:", updatedUser);
+
+    // Redirect back to profile page
+    return res.redirect(`/profile/view/${userId}`);
+  } catch (err) {
+    console.error("Error in /profile/update:", err);
+    res.status(500).send("Internal Server Error");
   }
 });
 
