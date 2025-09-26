@@ -4,11 +4,14 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const fileuplod = require("express-fileupload");
+
 
 const Blog = require("./models/blog");
 
 const userRoute = require("./routes/user");
 const blogRoute = require("./routes/blog");
+
 
 const {
   checkForAuthenticationCookie,
@@ -35,6 +38,10 @@ app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
 app.use(express.static(path.resolve("./public")));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use(fileuplod({
+  useTempFiles: true,
+  tempFileDir: "/tmp/"
+}));
 
 
 app.get("/", async (req, res) => {

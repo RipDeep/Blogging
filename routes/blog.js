@@ -4,21 +4,28 @@ const Comment = require("../models/comment");
 const multer = require("multer");
 const path = require("path");
 const Like = require("../models/like");
+const cloudinary = require("cloudinary").v2;
 
 const router = Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(`./public/uploads`));
-  },
-  filename: function (req, file, cb) {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    cb(null, fileName);
-  },
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, path.resolve(`./public/uploads`));
+//   },
+//   filename: function (req, file, cb) {
+//     const fileName = `${Date.now()}-${file.originalname}`;
+//     cb(null, fileName);
+//   },
+// });
+
+// const upload = multer({ storage: storage });
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
-
-const upload = multer({ storage: storage });
 
 router.get("/add-new", (req, res) => {
   return res.render("addBlog", {
@@ -78,15 +85,30 @@ router.post("/like/:blogId", async (req, res) => {
   }
 });
 
-router.post("/add-new", upload.single("coverImage"), async (req, res) => {
-  const { title, body } = req.body;
-  const blog = await Blog.create({
-    body,
-    title,
-    createdBy: req.user._id,
-    coverImageURL: `/uploads/${req.file.filename}`,
-  });
-  return res.redirect(`/blog/${blog._id}`);
+router.post("/add-new", async (req, res) => {
+  try {
+    
+    const { title, body } = req.body;
+    if (!req.files || !req.files.coverImage) {
+      return res.status(400).send("No file uploaded");
+    }
+    const file = req.files.coverImage;
+
+    const result = await cloudinary.uploader.upload(file.tempFilePath, {
+      folder: "blogify_uploads", 
+    });
+
+    const blog = await Blog.create({
+      body,
+      title,
+      createdBy: req.user._id,
+      coverImageURL: result.secure_url,
+    });
+    return res.redirect(`/blog/${blog._id}`);
+  } catch (error) {
+    console.error("Error in /add-new:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 module.exports = router;
