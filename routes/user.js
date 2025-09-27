@@ -31,11 +31,16 @@ router.post("/signin", async (req, res) => {
       email,
       password
     );
-    
-    return res.cookie("token", token).redirect("/");
+
+    return res
+      .cookie("token", token, {
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        httpOnly: false,
+      })
+      .redirect("/");
   } catch (error) {
     console.log(error);
-    
+
     return res.render("signin", {
       error: "Incorrect Email or Password",
     });
@@ -84,7 +89,10 @@ router.post("/signup", async (req, res) => {
       password
     );
 
-    return res.cookie("token", token).redirect("/");
+    return res.cookie("token", token,{
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          httpOnly: false,
+    }).redirect("/");
   } catch (error) {
     return res.render("signin", {
       error: "Incorrect Email or Password",
