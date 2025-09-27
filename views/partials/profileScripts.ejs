@@ -28,5 +28,25 @@ const modal = document.getElementById("editModal");
   });
 
 
+  const followerCount = document.getElementById("follower-count");
+const followersModal = document.getElementById("followersModal");
+const closeFollowers = document.getElementById("closeFollowers");
+
+followerCount.addEventListener("click", () => {
+  followersModal.style.display = "flex";
+});
+
+closeFollowers.addEventListener("click", () => {
+  followersModal.style.display = "none";
+});
+
+// Close modal when clicking outside content
+window.addEventListener("click", (e) => {
+  if (e.target === followersModal) {
+    followersModal.style.display = "none";
+  }
+});
+
+
 
 </script>

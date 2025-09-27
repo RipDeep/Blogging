@@ -24,11 +24,24 @@ router.get("/", async (req, res) => {
     const userDetails = await User.find({ _id: req.user._id });
 
 
+    
+    const followerIds = userDetails[0].followers.map(f => f.toString());
+
+
+
+const followersData = followerIds.length > 0
+    ? await User.find({ _id: { $in: followerIds } })
+    : [];
+
+
+
+
     return res.render("profile", {
       userDetails,
       user: req.user,
       userPosts, // pass user's blogs to template
       totalPosts: userPosts.length, // optional
+     followersData : followersData? followersData : [],
     });
   } catch (error) {
     console.error("Error loading profile:", error);
@@ -42,6 +55,16 @@ router.get("/view/:id", async (req, res) => {
   // Fetch the user whose profile we want to view
   const userDetails = await User.find({ _id: userId });
 
+  
+
+  const followerIds = userDetails[0].followers.map(f => f.toString());
+
+
+
+const followersData = followerIds.length > 0
+    ? await User.find({ _id: { $in: followerIds } })
+    : [];
+
   if (!userDetails) return res.status(404).send("User not found");
 
   // Fetch that user's posts
@@ -52,6 +75,7 @@ router.get("/view/:id", async (req, res) => {
     user: req.user, // currently logged-in user
     userPosts,
     totalPosts: userPosts.length,
+    followersData : followersData? followersData : [],
   });
 });
 

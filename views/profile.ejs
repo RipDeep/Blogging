@@ -339,8 +339,23 @@
   text-align: center;
 }
 
+.profileImageOutterDiv {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-
+      .profileImage {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        object-fit: cover;
+      }
+.profiledirect{
+  text-decoration: none;
+  color: white;
+}
       @media (max-width: 600px) {
         .user-posts {
           grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -436,6 +451,39 @@
                       Total Posts: <%= totalPosts %>
                     </div>
       </div>
+
+      <div class="modal" id="followersModal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeFollowers">&times;</span>
+    <h2>Followers</h2>
+    
+    <ul id="followersList" style="list-style:none; padding:0;">
+      
+      <% followersData.forEach(follower => { %>
+        <li style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); display: flex;
+        justify-content: space-between; align-items: center;">
+          <div class="profileImageOutterDiv">
+              <a class="profiledirect" href="/profile/view/<%= follower._id %>">
+              <img
+                src="<%= follower.profileImageURL %>"
+                alt="author"
+                class="profileImage"
+              /></a>
+              <a class="profiledirect" href="/profile/view/<%= follower._id %>">
+              <h6><%= follower.fullName %></h6>
+              </a>
+              
+            </div>
+            <div>
+              <h6>followers: <%= follower.followers.length %></h6>
+            </div>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</div>
+
+      
 
       <!-- User Posts -->
       <div class="user-posts">
