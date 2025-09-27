@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <%- include('./partials/head') %>
+
+<head>
+  <meta charset="UTF-8" />
+  <%- include('./partials/head') %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>John Doe's Profile</title>
 
@@ -151,7 +152,8 @@
         bottom: 0;
         right: 0;
         width: 70%;
-        height: 1.5em; /* height of fade */
+        height: 1.5em;
+        /* height of fade */
         background: linear-gradient(to right, transparent, white);
       }
 
@@ -184,6 +186,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
       }
+
       .follow-btn:hover {
         background: linear-gradient(135deg, #4338ca, #2563eb);
         transform: translateY(-2px);
@@ -191,251 +194,277 @@
       }
 
       .modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(6px);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    animation: fadeInBg 0.3s ease;
-  }
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(6px);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        animation: fadeInBg 0.3s ease;
+      }
 
-  /* Glassmorphism popup */
-  .modal-content {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 30px;
-    width: 90%;
-    max-width: 420px;
-    color: #fff;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-    border: 1px solid rgba(255,255,255,0.2);
-    animation: popIn 0.4s ease;
-    position: relative;
-  }
+      /* Glassmorphism popup */
+      .modal-content {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 30px;
+        width: 90%;
+        max-width: 420px;
+        color: #fff;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: popIn 0.4s ease;
+        position: relative;
+      }
 
-  .modal-content h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 1.4rem;
-    text-align: center;
-    color: #fff;
-    font-weight: 600;
-  }
+      .modal-content h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.4rem;
+        text-align: center;
+        color: #fff;
+        font-weight: 600;
+      }
 
-  .input-group {
-    margin-bottom: 15px;
-  }
+      .input-group {
+        margin-bottom: 15px;
+      }
 
-  .input-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    color: #e0e0e0;
-    font-size: 0.9rem;
-  }
+      .input-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+        color: #e0e0e0;
+        font-size: 0.9rem;
+      }
 
-  .input-group input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    font-size: 0.95rem;
-    outline: none;
-    transition: all 0.3s ease;
-  }
+      .input-group input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.3s ease;
+      }
 
-  .input-group input:focus {
-    background: rgba(255,255,255,0.2);
-    box-shadow: 0 0 0 2px rgba(79,70,229,0.6);
-  }
+      .input-group input:focus {
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.6);
+      }
 
-  .save-btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #4f46e5, #3b82f6);
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
+      .save-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #4f46e5, #3b82f6);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
 
-  .save-btn:hover {
-    background: linear-gradient(135deg, #4338ca, #2563eb);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(63, 81, 181, 0.3);
-  }
+      .save-btn:hover {
+        background: linear-gradient(135deg, #4338ca, #2563eb);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(63, 81, 181, 0.3);
+      }
 
-  .close-btn {
-    position: absolute;
-    top: 15px; right: 20px;
-    font-size: 1.6rem;
-    color: #fff;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
+      .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 1.6rem;
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
 
-  .close-btn:hover {
-    transform: rotate(90deg);
-  }
+      .close-btn:hover {
+        transform: rotate(90deg);
+      }
 
-  .loading-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(3px);
-  z-index: 5000;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
+      .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(3px);
+        z-index: 5000;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 6px solid #ccc;
-  border-top: 6px solid #4f46e5;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@media (max-width: 600px) {
-    .user-posts {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 15px;
-    }
-}
-
-@keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-#loading p {
-  margin-top: 15px;
-  font-weight: bold;
-  color: #333;
-}
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 6px solid #ccc;
+        border-top: 6px solid #4f46e5;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
 
 
-  /* Animations */
-  @keyframes popIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-  }
 
-  @keyframes fadeInBg {
-    from { background: rgba(0,0,0,0); }
-    to { background: rgba(0,0,0,0.45); }
-  }
+
+
+      @media (max-width: 600px) {
+        .user-posts {
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          gap: 15px;
+        }
+      }
+
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #loading p {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #333;
+      }
+
+
+      /* Animations */
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fadeInBg {
+        from {
+          background: rgba(0, 0, 0, 0);
+        }
+
+        to {
+          background: rgba(0, 0, 0, 0.45);
+        }
+      }
     </style>
-  </head>
-  <body>
-    <%- include('./partials/nav') %>
+</head>
+
+<body>
+  <%- include('./partials/nav') %>
 
     <div class="profile-container">
       <!-- Profile Card -->
       <div class="profile-card">
         <div class="profile-pic-wrapper">
-          <img
-            src="<%= userDetails[0].profileImageURL %>"
-            alt="Profile Picture"
-            class="profile-pic"
-          />
+          <img src="<%= userDetails[0].profileImageURL %>" alt="Profile Picture" class="profile-pic" />
           <button class="edit-pic-btn">✎</button>
         </div>
-        <div class="profile-name"><%= userDetails[0].fullName %></div>
+        <div class="profile-name">
+          <%= userDetails[0].fullName %>
+        </div>
         <div class="followers">
-          <span id="follower-count"
-            ><%= userDetails[0].followers.length %></span
-          >
+          <span id="follower-count">
+            <%= userDetails[0].followers.length %>
+          </span>
           Followers
         </div>
 
         <!-- Follow Button -->
-        <% if (user._id.toString() !== userDetails[0]._id.toString()) { %>
-        <form
-          action="/profile/follow/<%= userDetails[0]._id %>"
-          method="POST"
-          style="display: inline"
-        >
-          <button id="follow-btn" class="follow-btn">
-            <% if (userDetails[0].followers.includes(user._id)) { %> Unfollow <%
-            } else { %> Follow <% } %>
-          </button>
-        </form>
-        <% } %>
+        <% if (locals.user) { %>
+          <% if (user._id.toString() !==userDetails[0]._id.toString()) { %>
+            <form action="/profile/follow/<%= userDetails[0]._id %>" method="POST" style="display: inline">
+              <button id="follow-btn" class="follow-btn">
+                <% if (userDetails[0].followers.includes(user._id)) { %>
+                  Unfollow
+                  <% } else { %>
+                    Follow
+                    <% } %>
+              </button>
+            </form>
+            <% } else { %>
+              <button id="follow-btn" class="follow-btn" disabled>
+                Follow
+              </button>
+              <% } %>
+                <% } else { %>
+                  <!-- User not logged in -->
+                  <button id="follow-btn" class="follow-btn"
+                    onclick="showToast('You are not logged in! Please login first.')">
+                    Follow
+                  </button>
+                  <% } %>
 
-        <div class="total-posts">Total Posts: <%= totalPosts %></div>
+                    <!-- Toast container -->
+                    <div id="toast"></div>
+
+
+
+                    <div class="total-posts">
+                      Total Posts: <%= totalPosts %>
+                    </div>
       </div>
 
       <!-- User Posts -->
       <div class="user-posts">
-        <% userPosts.forEach(post=> { %>
-        <div class="post-card">
-          <img src="<%= post.coverImageURL %>" alt="Post Title 1" />
-          <div class="post-body">
-            <div class="post-title"><%=post.title %></div>
-            <a href="/blog/<%= post._id %>" class="btn btn-primary btn-sm"
-              >View</a
-            >
+        <% userPosts.slice().reverse().forEach(post=> { %>
+          <div class="post-card">
+            <img src="<%= post.coverImageURL %>" alt="Post Title 1" />
+            <div class="post-body">
+              <div class="post-title">
+                <%=post.title %>
+              </div>
+              <a href="/blog/<%= post._id %>" class="btn btn-primary btn-sm">View</a>
+            </div>
           </div>
-        </div>
-        <% }); %>
+          <% }); %>
       </div>
     </div>
 
     <!-- Add this after your profile-container -->
     <div class="modal" id="editModal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2>Edit Profile</h2>
-    <form action="/profile/update" method="POST" enctype="multipart/form-data" id="editForm">
-      <div class="input-group">
-        <label for="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value="<%= userDetails[0].fullName %>"
-          required
-        />
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Edit Profile</h2>
+        <form action="/profile/update" method="POST" enctype="multipart/form-data" id="editForm">
+          <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" value="<%= userDetails[0].fullName %>" required />
+          </div>
+
+          <div class="input-group">
+            <label for="profileImage">Profile Image</label>
+            <input type="file" id="profileImage" name="profileImage" accept="image/*" />
+          </div>
+
+          <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+        <div id="loading" class="loading-overlay">
+          <div class="spinner"></div>
+          <p>Updating profile...</p>
+        </div>
       </div>
 
-      <div class="input-group">
-        <label for="profileImage">Profile Image</label>
-        <input
-          type="file"
-          id="profileImage"
-          name="profileImage"
-          accept="image/*"
-        />
-      </div>
 
-      <button type="submit" class="save-btn">Save Changes</button>
-    </form>
-    <div id="loading" class="loading-overlay">
-      <div class="spinner"></div>
-      <p>Updating profile...</p>
-    </div>
-  </div>
+      <%- include('./partials/scripts') %>
+      <%-include('./partials/profileScripts') %>
+</body>
 
-
-    <%- include('./partials/scripts') %> 
-    <%-include('./partials/profileScripts') %>
-  </body>
 </html>

@@ -1,0 +1,47 @@
+<script>
+document.querySelectorAll(".like-form").forEach(form => {
+  form.addEventListener("submit", function(e) {
+    const btn = form.querySelector(".likeBtn");
+    const icon = btn.querySelector("i");
+
+    // replace icon with spinner
+    icon.style.display = "none";
+    const spinner = document.createElement("span");
+    spinner.classList.add("spinner");
+    btn.appendChild(spinner);
+
+    // let form submit normally
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Select all comment forms
+  document.querySelectorAll(".comment-form").forEach(form => {
+    form.addEventListener("submit", function(e) {
+      const btn = form.querySelector(".addCommentBtn");
+
+      if (btn) {
+        // disable button to prevent multiple clicks
+        btn.disabled = true;
+
+        // replace button text with spinner
+        btn.innerHTML = '<span class="commentBtn-spinner"></span>';
+      }
+    });
+  });
+
+  // Optional: also target the second comment form if it doesn't have .comment-form
+  document.querySelectorAll(".commentDiv1 form").forEach(form => {
+    form.addEventListener("submit", function(e) {
+      const btn = form.querySelector("button[type='submit']");
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="commentBtn-spinner"></span>';
+      }
+    });
+  });
+});
+
+
+</script>

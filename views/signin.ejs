@@ -13,9 +13,8 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-       
-        overflow: hidden;
 
+        overflow: hidden;
 
         background-color: #1e3a8a; /* Dark blue base */
         background-image: linear-gradient(
@@ -23,17 +22,21 @@
             rgba(255, 255, 255, 0.1) 25%,
             transparent 25%
           ),
-          linear-gradient(225deg,  transparent, 25%, rgba(255, 255, 255, 0.1) 25%),
-          linear-gradient(45deg , transparent, 25%, rgba(255, 255, 255, 0.1) 25%),
-          linear-gradient(315deg,  #1e3a8a ,25%, rgba(255, 255, 255, 0.1) 25%);
+          linear-gradient(
+            225deg,
+            transparent,
+            25%,
+            rgba(255, 255, 255, 0.1) 25%
+          ),
+          linear-gradient(45deg, transparent, 25%, rgba(255, 255, 255, 0.1) 25%),
+          linear-gradient(315deg, #1e3a8a, 25%, rgba(255, 255, 255, 0.1) 25%);
         background-size: 60px 60px;
         background-repeat: repeat;
       }
 
       /* Form Card */
       .signin-container {
-        margin-bottom: 150px;
-        margin-top: 50px;
+        margin: 50px 20px 150px;
         background: rgba(255, 255, 255, 0.95);
         border-radius: 20px;
         padding: 2.5rem 2rem;
@@ -43,6 +46,29 @@
         text-align: center;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
+
+      @media (max-width: 576px) {
+  .signin-container {
+    margin: 50px 15px 150px; /* less horizontal margin on tiny screens */
+    padding: 2rem 1rem;      /* reduce padding */
+    border-radius: 16px; 
+    max-width: 90vw;    /* slightly smaller radius */
+  }
+
+  .signin-title {
+    font-size: 1.6rem;       /* slightly smaller title */
+  }
+
+  .form-control {
+    padding: 0.65rem 0.85rem; /* smaller input padding */
+    font-size: 0.95rem;       /* smaller font */
+  }
+
+  .btn-modern {
+    padding: 0.7rem 0.9rem;   /* smaller button padding */
+    font-size: 0.95rem;
+  }
+}
 
       .signin-container:hover {
         transform: translateY(-5px);
@@ -70,13 +96,13 @@
 
       .form-control:focus {
         outline: none;
-       
+
         border-color: #4f46e5;
         box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.2);
       }
 
       label {
-         margin-left: 7px;
+        margin-left: 7px;
         font-weight: 600;
         color: #333;
         margin-bottom: 0.25rem;
@@ -162,7 +188,9 @@
       }
 
       @keyframes spin {
-        100% { transform: rotate(360deg); }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       .loader-box p {
@@ -172,18 +200,30 @@
       }
 
       .loader-box .dots::after {
-        content: '';
+        content: "";
         display: inline-block;
         width: 0.6em;
         animation: blink 1s infinite steps(1);
       }
 
       @keyframes blink {
-        0%, 20% { content: ''; }
-        40% { content: '.'; }
-        60% { content: '..'; }
-        80%, 100% { content: '...'; }
+        0%,
+        20% {
+          content: "";
+        }
+        40% {
+          content: ".";
+        }
+        60% {
+          content: "..";
+        }
+        80%,
+        100% {
+          content: "...";
+        }
       }
+
+      
     </style>
   </head>
 
@@ -194,20 +234,35 @@
       <form id="signinForm" action="/user/signin" method="post">
         <div class="mb-3">
           <label for="email">Email address</label>
-          <input type="email" name="email" class="form-control" id="email" placeholder="example@email.com" required />
-          <div class="form-text">We'll never share your email with anyone else.</div>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            id="email"
+            placeholder="example@email.com"
+            required
+          />
+          <div class="form-text">
+            We'll never share your email with anyone else.
+          </div>
         </div>
         <div class="mb-3">
           <label for="password">Password</label>
-          <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password" required />
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            id="password"
+            placeholder="Enter your password"
+            required
+          />
         </div>
         <button type="submit" class="btn-modern">Sign In</button>
         <div class="login-link">
-        Don't have an account? <a href="/user/signup">Create</a>
-      </div>
+          Don't have an account? <a href="/user/signup">Create</a>
+        </div>
       </form>
     </div>
-    
 
     <!-- Loader Overlay -->
     <div id="loader" class="loader-overlay">

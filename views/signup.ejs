@@ -6,12 +6,12 @@
 
     <style>
       body {
-        margin: 0;
+        
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         /* background: linear-gradient(135deg, #e0e7ff, #f0f4ff); */
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         min-height: 100vh;
 
@@ -29,7 +29,8 @@
       }
 
       .signup-container {
-        margin: 50px 0;
+        margin-bottom: 50px;
+        margin-top: 10px;
         background: #ffffffee;
         padding: 2.5rem 2rem;
         border-radius: 20px;
@@ -37,6 +38,14 @@
         width: 100%;
         max-width: 420px;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      @media (max-width: 576px) {
+        .signup-container {
+          margin: 60px 15px; /* reduce vertical margin on small screens */
+          padding: 2rem 1rem; /* reduce padding */
+          border-radius: 16px; /* slightly smaller radius */
+          max-width: 90vw; /* slightly smaller max-width */
+        }
       }
 
       .signup-container:hover {

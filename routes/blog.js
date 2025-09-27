@@ -8,8 +8,6 @@ const cloudinary = require("cloudinary").v2;
 
 const router = Router();
 
-
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -40,10 +38,7 @@ router.get("/:id", async (req, res) => {
   });
 });
 
-
 router.post("/comment/:blogId", async (req, res) => {
-  
-
   await Comment.create({
     content: req.body.content,
     blogId: req.params.blogId,
@@ -80,7 +75,6 @@ router.post("/like/:blogId", async (req, res) => {
 
 router.post("/add-new", async (req, res) => {
   try {
-    
     const { title, body } = req.body;
     if (!req.files || !req.files.coverImage) {
       return res.status(400).send("No file uploaded");
@@ -88,7 +82,7 @@ router.post("/add-new", async (req, res) => {
     const file = req.files.coverImage;
 
     const result = await cloudinary.uploader.upload(file.tempFilePath, {
-      folder: "blogify_uploads", 
+      folder: "blogify_uploads",
     });
 
     const blog = await Blog.create({
@@ -103,7 +97,5 @@ router.post("/add-new", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-
 
 module.exports = router;
