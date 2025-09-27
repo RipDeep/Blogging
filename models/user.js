@@ -37,11 +37,21 @@ const userSchema = new Schema(
 userSchema.pre("save", function (next) {
   const user = this;
 
+  if (user.fullName) user.fullName = user.fullName.trim();
+  if (user.email) user.email = user.email.trim();
+  if (user.password) user.password = user.password.trim();
+
+   if (!user.password) {
+    return next(new Error("Password cannot be empty or spaces only"));
+  }
+
   if (!user.isModified("password")) {
     return;
   }
 
-  const salt = randomBytes(16).toString();
+
+
+  const salt = randomBytes(16).toString("hex");
 
   const hashPassword = createHmac("sha256", salt)
     .update(user.password)

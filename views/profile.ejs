@@ -132,6 +132,7 @@
       .post-body {
         padding: 15px;
         flex: 1;
+        position: relative;
       }
 
       .post-title {
@@ -180,8 +181,8 @@
         background: linear-gradient(135deg, #4f46e5, #3b82f6);
         color: #fff;
         border: none;
-        padding: 8px 16px;
-        border-radius: 10px;
+        padding: 5px 16px;
+        border-radius: 7px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -318,7 +319,25 @@
         animation: spin 1s linear infinite;
       }
 
+.viewBtn{
+  border-radius: 7PX !important;
+}
+.deleteBTN{
+  border-radius: 7PX !important;
+  position: absolute;
+  right: 12px;
+}
 
+.viewBtn, .deleteBTN {
+  border-radius: 4px;       /* same corner rounding */
+  width: 30% !important;             /* same width */
+  height: 35px !important;           /* same height */
+  display: inline-flex;     /* allows vertical centering */
+  justify-content: center;  /* horizontal center text */
+  align-items: center;      /* vertical center text */
+  font-size: 0.9rem;        /* optional: adjust text size */
+  text-align: center;
+}
 
 
 
@@ -399,12 +418,8 @@
                     <% } %>
               </button>
             </form>
-            <% } else { %>
-              <button id="follow-btn" class="follow-btn" disabled>
-                Follow
-              </button>
-              <% } %>
-                <% } else { %>
+          
+                <% }} else { %>
                   <!-- User not logged in -->
                   <button id="follow-btn" class="follow-btn"
                     onclick="showToast('You are not logged in! Please login first.')">
@@ -431,7 +446,14 @@
               <div class="post-title">
                 <%=post.title %>
               </div>
-              <a href="/blog/<%= post._id %>" class="btn btn-primary btn-sm">View</a>
+              <a href="/blog/<%= post._id %>" class="btn btn-primary btn-sm viewBtn">View</a>
+              <% if (locals.user && post.createdBy.toString() === user._id.toString()) { %>
+                <form action="/blog/delete/<%= post._id %>" method="POST" style="display: inline;">
+                  <button type="submit" class="btn btn-danger btn-sm deleteBTN" onclick="return confirm('Are you sure you want to delete this post?');">
+                    Delete
+                  </button>
+                </form>
+              <% } %>
             </div>
           </div>
           <% }); %>

@@ -28,7 +28,7 @@ router.get("/:id", async (req, res) => {
   const likes = await Like.find({ blogId: req.params.id }).populate(
     "createdBy"
   );
-  console.log("req.user:", req.user);
+  
 
   return res.render("blog", {
     user: req.user,
@@ -95,6 +95,108 @@ router.post("/add-new", async (req, res) => {
   } catch (error) {
     console.error("Error in /add-new:", error);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+// Delete a blog post
+router.post("/delete/:id", async (req, res) => {
+  try {
+    const blogId = req.params.id;
+
+    // Make sure user is logged in
+    if (!req.user) {
+      return res.status(401).send("You must be logged in to delete a post");
+    }
+
+    // Find the blog post
+    const post = await Blog.findById(blogId);
+
+    if (!post) {
+      return res.status(404).send("Post not found");
+    }
+
+    // Ensure the logged-in user is the creator
+    if (post.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).send("You are not authorized to delete this post");
+    }
+
+    // Delete the post
+    await post.deleteOne();
+
+    // Redirect back to profile
+    return res.redirect("/profile");
+  } catch (err) {
+    console.error("Error deleting post:", err);
+    return res.status(500).send("Server Error");
+  }
+});
+
+router.get("/edit/:id", async (req, res) => {
+  try {
+    const blogId = req.params.id;
+
+    // Make sure user is logged in
+    if (!req.user) {
+      return res.redirect("/login");
+    }
+
+    const blog = await Blog.findById(blogId);
+
+    if (!blog) {
+      return res.status(404).send("Blog not found");
+    }
+
+    // Ensure logged-in user is the author
+    if (blog.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).send("You are not authorized to edit this blog");
+    }
+
+    res.render("editBlog", {
+      user: req.user,
+      blog
+    });
+  } catch (err) {
+    console.error("Error loading edit page:", err);
+    res.status(500).send("Server Error");
+  }
+});
+
+// POST update blog
+router.post("/edit/:id", async (req, res) => {
+  try {
+    const blogId = req.params.id;
+    const { title, body } = req.body;
+
+    const blog = await Blog.findById(blogId);
+
+    if (!blog) {
+      return res.status(404).send("Blog not found");
+    }
+
+    // Ensure logged-in user is the author
+    if (blog.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).send("You are not authorized to edit this blog");
+    }
+
+    // Update blog details
+    blog.title = title;
+    blog.body = body;
+
+    // Optional: handle new cover image
+    if (req.files && req.files.coverImage) {
+      const file = req.files.coverImage;
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "blogify_uploads",
+      });
+      blog.coverImageURL = result.secure_url;
+    }
+
+    await blog.save();
+
+    res.redirect(`/blog/${blog._id}`);
+  } catch (err) {
+    console.error("Error updating blog:", err);
+    res.status(500).send("Server Error");
   }
 });
 

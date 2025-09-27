@@ -23,9 +23,6 @@ router.get("/", async (req, res) => {
     const userPosts = await Blog.find({ createdBy: req.user._id });
     const userDetails = await User.find({ _id: req.user._id });
 
-    console.log("Username is", userDetails);
-
-    console.log("Logged in user:", req.user);
 
     return res.render("profile", {
       userDetails,
@@ -41,11 +38,9 @@ router.get("/", async (req, res) => {
 
 router.get("/view/:id", async (req, res) => {
   const userId = req.params.id;
-  console.log("User ID to view:", userId);
-
+ 
   // Fetch the user whose profile we want to view
   const userDetails = await User.find({ _id: userId });
-  console.log("userDetails:", userDetails);
 
   if (!userDetails) return res.status(404).send("User not found");
 
@@ -127,8 +122,6 @@ router.post("/update", async (req, res) => {
       { new: true }
     );
 
-    console.log("Updated User:", updatedUser);
-
     // Redirect back to profile page
     return res.redirect(`/profile/view/${userId}`);
   } catch (err) {
@@ -136,6 +129,9 @@ router.post("/update", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
+
 
 
 module.exports = router;
