@@ -26,13 +26,14 @@
 
       /* Profile Card */
       .profile-card {
-        background: #fff;
+        background: #1A1C21;
         border-radius: 16px;
         padding: 30px 20px;
         text-align: center;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
         width: 100%;
         max-width: 400px;
+        color: white;
         position: relative;
         transition: transform 0.3s, box-shadow 0.3s;
       }
@@ -94,7 +95,7 @@
 
       .total-posts {
         font-size: 0.95rem;
-        color: #333;
+        color: rgb(177, 173, 173);
         font-weight: 600;
         margin-bottom: 10px;
       }
@@ -102,7 +103,7 @@
       /* Posts */
       .user-posts {
         width: 100%;
-        margin-top: 40px;
+        margin-top: 5px;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 20px;
@@ -356,6 +357,18 @@
   text-decoration: none;
   color: white;
 }
+
+.user-post-heading {
+  font-size: 2rem;  
+  margin-top: 40px;         /* Larger text */
+  color: #1A1C21;            /* Purple color */
+  text-align: center;        /* Centered */
+  margin-bottom: 20px;       /* Space below */
+  font-weight: 700;          /* Bold */
+  letter-spacing: 1px;       /* Slight spacing */
+  text-transform: uppercase; /* Optional: uppercase letters */
+}
+
       @media (max-width: 600px) {
         .user-posts {
           grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -415,7 +428,7 @@
           <%= userDetails[0].fullName %>
         </div>
         <div class="followers">
-          <span id="follower-count" style="cursor: pointer;">
+          <span id="follower-count" style="cursor: pointer; color: rgb(177, 173, 173);">
             <%= userDetails[0].followers.length %>
           
           Followers
@@ -484,7 +497,7 @@
   </div>
 </div>
 
-      
+      <h1 class="user-post-heading">Your Post</h1>
 
       <!-- User Posts -->
       <div class="user-posts">
