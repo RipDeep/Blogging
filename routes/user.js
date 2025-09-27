@@ -31,7 +31,7 @@ router.post("/signin", async (req, res) => {
       email,
       password
     );
-
+    
     return res.cookie("token", token).redirect("/");
   } catch (error) {
     console.log(error);
