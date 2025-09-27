@@ -1,8 +1,8 @@
 <script>
 document.querySelectorAll(".like-form").forEach(form => {
   form.addEventListener("submit", function(e) {
-    const btn = form.querySelector(".likeBtn");
-    const icon = btn.querySelector("i");
+    const btn = document.querySelector(".likeBtn");
+    const icon = btn.querySelector(".likeIcon");
 
     // replace icon with spinner
     icon.style.display = "none";
