@@ -369,6 +369,82 @@
   text-transform: uppercase; /* Optional: uppercase letters */
 }
 
+
+/* Analytics Section */
+.analytics-card {
+  color: #000;
+  background: #1A1C21;
+  border-radius: 16px;
+  padding: 25px;
+  margin-top: 40px;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  animation: fadeInUp 0.5s ease;
+}
+
+.analytics-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 5px;
+}
+
+.analytics-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.analytics-metrics {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.metric-box {
+  /* background: linear-gradient(135deg, #4f46e5, #3b82f6); */
+  background: linear-gradient(135deg, rgb(68, 67, 67), gray, rgb(68, 67, 67));
+  color: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  flex: 1 1 45%;
+  min-width: 220px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.metric-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(54, 54, 56, 0.3);
+}
+
+.metric-box h4 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.metric-box p {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
       @media (max-width: 600px) {
         .user-posts {
           grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -464,7 +540,7 @@
                     <div class="total-posts">
                       Total Posts: <%= totalPosts %>
                     </div>
-      </div>
+                 </div>
 
       <div class="modal" id="followersModal">
   <div class="modal-content">
@@ -497,7 +573,36 @@
   </div>
 </div>
 
-      <h1 class="user-post-heading">Your Post</h1>
+
+
+<% if (user._id.toString() ==userDetails[0]._id.toString()) { %>
+<!-- Analytics Section -->
+<div class="analytics-card">
+  <h3 class="analytics-title">Analytics</h3>
+  <h6 class="analytics-subtitle">Private to you</h6>
+  <div class="analytics-metrics">
+    <div class="metric-box">
+      <h4><%= userDetails[0].profileViews %></h4>
+      <p>Profile views this month</p>
+    </div>
+    <div class="metric-box">
+      <h4><%= userDetails[0].userBlogViews %></h4>
+      <p>Post impressions this month</p>
+    </div>
+  </div>
+</div>
+<% } %>
+
+
+
+
+<% if (user._id.toString() !==userDetails[0]._id.toString()) { %>
+  <h1 class="user-post-heading"><%= userDetails[0].fullName %>'s Posts</h1>
+<% }else { %>
+
+  <h1 class="user-post-heading">Your Posts</h1>
+<% }  %>
+ 
 
       <!-- User Posts -->
       <div class="user-posts">

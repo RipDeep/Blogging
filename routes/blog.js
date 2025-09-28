@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Blog = require("../models/blog");
+const User = require("../models/user");
 const Comment = require("../models/comment");
 const multer = require("multer");
 const path = require("path");
@@ -21,14 +22,60 @@ router.get("/add-new", (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const blog = await Blog.findById(req.params.id).populate("createdBy");
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+
+  const blog = await Blog.findById(req.params.id).populate("createdBy"); 
+
+  if (!blog) {
+    return res.status(404).send("Blog not found");
+  }
   const comments = await Comment.find({ blogId: req.params.id }).populate(
     "createdBy"
   );
   const likes = await Like.find({ blogId: req.params.id }).populate(
     "createdBy"
   );
-  
+
+  const now = new Date();
+  const lastReset = blog.createdBy.lastReset || new Date();
+
+  // Ensure logged-in user is the author
+  let shouldIncrement = false;
+
+  if (!req.user) {
+    // Not logged in → increment
+    shouldIncrement = true;
+  } else if (blog.createdBy._id.toString() !== req.user._id.toString()) {
+    // Logged in but not the author → increment
+    shouldIncrement = true;
+  }
+
+  if (
+    now.getMonth() !== lastReset.getMonth() ||
+    now.getFullYear() !== lastReset.getFullYear()
+  ) {
+    // Reset views and update lastReset
+    await User.updateOne(
+      { _id: blog.createdBy._id },
+      { $set: { userBlogViews: 0, lastReset: now } }
+    );
+    blog.createdBy.userBlogViews = 0;
+    blog.createdBy.lastReset = now;
+  }
+
+  if (shouldIncrement) {
+    await Blog.updateOne({ _id: blog._id }, { $inc: { views: 1 } });
+
+    await User.updateOne(
+      { _id: blog.createdBy._id },
+      { $inc: { userBlogViews: 1 } }
+    );
+    // also increment in memory so template shows updated value
+    blog.views += 1;
+    blog.createdBy.userBlogViews += 1;
+  }
 
   return res.render("blog", {
     user: req.user,
@@ -153,7 +200,7 @@ router.get("/edit/:id", async (req, res) => {
 
     res.render("editBlog", {
       user: req.user,
-      blog
+      blog,
     });
   } catch (err) {
     console.error("Error loading edit page:", err);

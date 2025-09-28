@@ -30,6 +30,22 @@ const userSchema = new Schema(
       default: "USER",
     },
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    profileViews: {
+      type: Number,
+      default: 0,
+    },
+    userBlogViews: {
+      type: Number,
+      default: 0,
+    },
+    lastReset: {
+      type: Date,
+      default: new Date(),
+    },
+    lastResetProfileViews: {
+      type: Date,
+      default: new Date(),
+    },
   },
   { timestamps: true }
 );
@@ -41,15 +57,13 @@ userSchema.pre("save", function (next) {
   if (user.email) user.email = user.email.trim();
   if (user.password) user.password = user.password.trim();
 
-   if (!user.password) {
+  if (!user.password) {
     return next(new Error("Password cannot be empty or spaces only"));
   }
 
   if (!user.isModified("password")) {
     return;
   }
-
-
 
   const salt = randomBytes(16).toString("hex");
 

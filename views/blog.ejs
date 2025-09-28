@@ -260,84 +260,93 @@
         transform: translateY(-2px);
       }
 
+      .commentBtn-spinner {
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-top: 2px solid #fff; /* white spinner for blue button */
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        animation: comment-spin 0.6s linear infinite;
+        display: inline-block;
+        vertical-align: middle;
+      }
 
-.commentBtn-spinner {
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-top: 2px solid #fff; /* white spinner for blue button */
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  animation: comment-spin 0.6s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
-}
+      .editeBtn {
+        margin-top: -15px;
+        border: none !important;
+        background-color: #0d6efd; /* Bootstrap primary blue */
+        color: #fff;
+        padding: 6px 14px; /* adjust for button size */
+        border-radius: 8px; /* smooth rounded corners */
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* subtle shadow */
+        transition: background-color 0.3s ease, transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
 
-.editeBtn {
-  margin-top: -15px;
-  border: none !important;
-  background-color: #0d6efd; /* Bootstrap primary blue */
-  color: #fff;
-  padding: 6px 14px;        /* adjust for button size */
-  border-radius: 8px;       /* smooth rounded corners */
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* subtle shadow */
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
+      .editeBtn:hover {
+        color: #fff;
+        background-color: #084298; /* darker blue on hover */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
 
-.editeBtn:hover {
-  color: #fff;
-  background-color: #084298;  /* darker blue on hover */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
+      .editeBtn:active {
+        color: #fff;
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      }
 
-.editeBtn:active {
-  color: #fff;
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
+      .botoom-info {
+        padding: 0px 5px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        justify-content: space-between;
+        
+      }
+      .views-count {
+        font-size: 0.9rem;
+        color: #888;
+        font-style: italic;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: -13px;
+      }
 
+      @keyframes comment-spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
+      .spinner {
+        border: 3px solid rgba(0, 0, 0, 0.1); /* light outer circle */
+        border-top: 3px solid #0d6efd; /* blue spinning part */
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 0.8s linear infinite;
+        display: inline-block;
+        vertical-align: middle;
+      }
 
-
-.botoom-info{
-  padding: 0px 5px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  justify-content: space-between;
-}
-
-
-@keyframes comment-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-
-
-.spinner {
-  border: 3px solid rgba(0, 0, 0, 0.1); /* light outer circle */
-  border-top: 3px solid #0d6efd;       /* blue spinning part */
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 0.8s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-
-
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
       @media (max-width: 992px) {
         .commentDiv {
@@ -389,74 +398,95 @@
           </div>
 
           <div class="botoom-info">
-
-          <p class="blog-date">
-            Posted on <%= new Date(blog.createdAt).toDateString().slice(4) %> by
-            <%= blog.createdBy.fullName %>
-
-           
-          </p>
- <% if (locals.user && blog.createdBy._id.toString() === user._id.toString()) { %>
-    <a href="/blog/edit/<%= blog._id %>" class="btn editeBtn btn-sm btn-warning" style="margin-left: 10px;">
-      Edit
-    </a>
-  <% } %>
-          
+            <p class="blog-date">
+              Posted on <%= new Date(blog.createdAt).toDateString().slice(4) %>
+              by <%= blog.createdBy.fullName %>
+            </p>
+            <div
+              class="views-count"
+            >
+              <%= blog.views %> impressions 
+            </div>
           </div>
-
-          
+          <div>
+            <% if (locals.user && blog.createdBy._id.toString() ===
+            user._id.toString()) { %>
+            <a
+              href="/blog/edit/<%= blog._id %>"
+              class="btn editeBtn btn-sm btn-warning"
+              style="margin-left: 10px"
+            >
+              Edit
+            </a>
+            <% } %>
+          </div>
 
           <div class="details">
             <div class="profileImageOutterDiv">
-              <a class="profiledirect" href="/profile/view/<%= blog.createdBy._id %>">
-              <img
-                src="<%= blog.createdBy.profileImageURL %>"
-                alt="author"
-                class="profileImage"
+              <a
+                class="profiledirect"
+                href="/profile/view/<%= blog.createdBy._id %>"
+              >
+                <img
+                  src="<%= blog.createdBy.profileImageURL %>"
+                  alt="author"
+                  class="profileImage"
               /></a>
-              <a class="profiledirect" href="/profile/view/<%= blog.createdBy._id %>">
-              <h6><%= blog.createdBy.fullName %></h6>
+              <a
+                class="profiledirect"
+                href="/profile/view/<%= blog.createdBy._id %>"
+              >
+                <h6><%= blog.createdBy.fullName %></h6>
               </a>
-              
             </div>
 
             <div class="post-interactions">
-              <form action="/blog/like/<%= blog._id %>" method="post" class="like-form">
+              <form
+                action="/blog/like/<%= blog._id %>"
+                method="post"
+                class="like-form"
+              >
                 <div class="like" id="like-btn" data-blog-id="<%= blog._id %>">
                   <% if (locals.user) { %>
-                    <!-- Logged in: normal like button -->
-                    <button class="btn btn-sm commentBtn likeBtn" type="submit">
-                      <i
-                        class="fa-regular fa-thumbs-up likeIcon <%= likes.some                 (l => l.createdBy._id.toString() === user?._id.                 toString()) ? 'fa-solid text-primary' :                 'fa-regular' %>">
-                      </i>
-                    </button>
+                  <!-- Logged in: normal like button -->
+                  <button class="btn btn-sm commentBtn likeBtn" type="submit">
+                    <i
+                      class="fa-regular fa-thumbs-up likeIcon <%= likes.some (l => l.createdBy._id.toString() === user?._id. toString()) ? 'fa-solid text-primary' : 'fa-regular' %>"
+                    >
+                    </i>
+                  </button>
                   <% } else { %>
-                    <!-- Not logged in: prevent submit and show toast                   -->
-                    <button class="btn btn-sm commentBtn"                   type="button" onclick="showToast('You are not                   logged in! Please login first.')">
-                      <i class="fa-regular fa-thumbs-up"></i>
-                    </button>
+                  <!-- Not logged in: prevent submit and show toast                   -->
+                  <button
+                    class="btn btn-sm commentBtn"
+                    type="button"
+                    onclick="showToast('You are not                   logged in! Please login first.')"
+                  >
+                    <i class="fa-regular fa-thumbs-up"></i>
+                  </button>
                   <% } %>
 
                   <div id="toast"></div>
 
-          
-
                   <span class="like-count"><%= likes.length %></span>
                 </div>
-             </form>
+              </form>
               <div class="comment" id="scroll-to-comments">
                 <i class="fa-regular fa-comment"></i>
                 <span class="comment-count"><%= comments.length %></span>
               </div>
             </div>
-            
           </div>
 
           <!-- Comments -->
           <div class="commentDiv">
             <h3>Comments</h3>
             <% if (locals.user) { %>
-            <form action="/blog/comment/<%= blog._id %>" method="post" class="comment-form">
+            <form
+              action="/blog/comment/<%= blog._id %>"
+              method="post"
+              class="comment-form"
+            >
               <div class="mb-3 d-flex">
                 <input
                   type="text"
@@ -464,7 +494,10 @@
                   class="form-control commentInput"
                   placeholder="Enter your comment..."
                 />
-                <button class="btn btn-sm commentBtn btn-primary addCommentBtn " type="submit">
+                <button
+                  class="btn btn-sm commentBtn btn-primary addCommentBtn"
+                  type="submit"
+                >
                   Add
                 </button>
               </div>
@@ -480,11 +513,11 @@
               <div class="comment-card">
                 <div class="d-flex align-items-center gap-2">
                   <a href="/profile/view/<%= comment.createdBy._id %>">
-                  <img
-                    src="<%= comment.createdBy.profileImageURL %>"
-                    alt="profile"
-                    class="profileImage"
-                  />
+                    <img
+                      src="<%= comment.createdBy.profileImageURL %>"
+                      alt="profile"
+                      class="profileImage"
+                    />
                   </a>
                   <div>
                     <h6 class="comment-author">
@@ -537,17 +570,20 @@
           <div class="comment-card">
             <div class="d-flex align-items-center gap-2">
               <a href="/profile/view/<%= comment.createdBy._id %>">
-              <img
-                src="<%= comment.createdBy.profileImageURL %>"
-                alt="profile"
-                class="profileImage"
-              />
-            </a>
+                <img
+                  src="<%= comment.createdBy.profileImageURL %>"
+                  alt="profile"
+                  class="profileImage"
+                />
+              </a>
               <div>
-                <a class="profiledirect" href="/profile/view/<%= comment.createdBy._id %>">
-                <h6 class="comment-author">
-                  <%= comment.createdBy.fullName %>
-                </h6>
+                <a
+                  class="profiledirect"
+                  href="/profile/view/<%= comment.createdBy._id %>"
+                >
+                  <h6 class="comment-author">
+                    <%= comment.createdBy.fullName %>
+                  </h6>
                 </a>
                 <span class="comment-date"
                   ><%= comment.createdAt.toDateString() %></span
@@ -564,8 +600,7 @@
       <button id="back-to-top" title="Go to top">↑</button>
     </div>
 
-    <%- include('./partials/scripts') %> 
-    <%- include('./partials/scrolling') %>
+    <%- include('./partials/scripts') %> <%- include('./partials/scrolling') %>
     <%- include('./partials/blogScript') %>
   </body>
 </html>

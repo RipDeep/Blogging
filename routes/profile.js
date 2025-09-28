@@ -23,25 +23,19 @@ router.get("/", async (req, res) => {
     const userPosts = await Blog.find({ createdBy: req.user._id });
     const userDetails = await User.find({ _id: req.user._id });
 
+    const followerIds = userDetails[0].followers.map((f) => f.toString());
 
-    
-    const followerIds = userDetails[0].followers.map(f => f.toString());
-
-
-
-const followersData = followerIds.length > 0
-    ? await User.find({ _id: { $in: followerIds } })
-    : [];
-
-
-
+    const followersData =
+      followerIds.length > 0
+        ? await User.find({ _id: { $in: followerIds } })
+        : [];
 
     return res.render("profile", {
       userDetails,
       user: req.user,
       userPosts, // pass user's blogs to template
       totalPosts: userPosts.length, // optional
-     followersData : followersData? followersData : [],
+      followersData: followersData ? followersData : [],
     });
   } catch (error) {
     console.error("Error loading profile:", error);
@@ -51,19 +45,56 @@ const followersData = followerIds.length > 0
 
 router.get("/view/:id", async (req, res) => {
   const userId = req.params.id;
- 
+
   // Fetch the user whose profile we want to view
   const userDetails = await User.find({ _id: userId });
 
+  if (!userDetails) {
+    return res.status(404).send("User not found");
+  }
+  
+  const followerIds = userDetails[0].followers.map((f) => f.toString());
+  
+  const user = await User.findById(userId);
+
+
+  let shouldIncrement = false;
+  if (!req.user) {
+    shouldIncrement = true;
+  } else if (req.user._id.toString() !== user._id.toString()) {
+    shouldIncrement = true;
+  }
+
+
+  const now = new Date();
+  if (
+    !userDetails[0].lastResetProfileViews ||
+    now.getMonth() !== userDetails[0].lastResetProfileViews.getMonth() ||
+    now.getFullYear() !== userDetails[0].lastResetProfileViews.getFullYear()
+  ) {
+    await User.updateOne(
+      { _id: userId },
+      { $set: { profileViews: 0, lastResetProfileViews: now } }
+    );
+    userDetails[0].profileViews = 0; // reset in memory
+    userDetails[0].lastResetProfileViews = now;
+  }
+
   
 
-  const followerIds = userDetails[0].followers.map(f => f.toString());
+  
 
+  if (shouldIncrement) {
+    await User.updateOne({ _id: userId }, { $inc: { profileViews: 1 } });
+    userDetails.profileViews += 1; // keep in sync for rendering
+  }
 
+  
 
-const followersData = followerIds.length > 0
-    ? await User.find({ _id: { $in: followerIds } })
-    : [];
+  const followersData =
+    followerIds.length > 0
+      ? await User.find({ _id: { $in: followerIds } })
+      : [];
 
   if (!userDetails) return res.status(404).send("User not found");
 
@@ -75,7 +106,7 @@ const followersData = followerIds.length > 0
     user: req.user, // currently logged-in user
     userPosts,
     totalPosts: userPosts.length,
-    followersData : followersData? followersData : [],
+    followersData: followersData ? followersData : [],
   });
 });
 
@@ -95,21 +126,19 @@ router.post("/follow/:id", async (req, res) => {
 
     // Check if already following
     const isFollowing = targetUser.followers
-      .map(id => id.toString())
+      .map((id) => id.toString())
       .includes(currentUserId.toString());
 
     if (isFollowing) {
       // Unfollow: remove currentUserId from followers
-      await User.findByIdAndUpdate(
-        targetUserId,
-        { $pull: { followers: currentUserId } }
-      );
+      await User.findByIdAndUpdate(targetUserId, {
+        $pull: { followers: currentUserId },
+      });
     } else {
       // Follow: add currentUserId to followers if not exists
-      await User.findByIdAndUpdate(
-        targetUserId,
-        { $addToSet: { followers: currentUserId } }
-      );
+      await User.findByIdAndUpdate(targetUserId, {
+        $addToSet: { followers: currentUserId },
+      });
     }
 
     return res.redirect(`/profile/view/${targetUserId}`);
@@ -140,11 +169,9 @@ router.post("/update", async (req, res) => {
     }
 
     // Update user in DB
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      updateData,
-      { new: true }
-    );
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    });
 
     // Redirect back to profile page
     return res.redirect(`/profile/view/${userId}`);
@@ -153,9 +180,5 @@ router.post("/update", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-
-
-
 
 module.exports = router;

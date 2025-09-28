@@ -18,6 +18,10 @@ const blogSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+    views: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
