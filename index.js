@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const fileuplod = require("express-fileupload");
 
 const Blog = require("./models/blog");
-const Notification = require("../Blogging/models/notifications");
+const Notification = require("./models/notifications");
 const User = require("./models/user");      
 
 
