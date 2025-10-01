@@ -85,7 +85,6 @@ app.get("/", async (req, res) => {
 
   let notifications = [];
   let unreadCount = 0;
-  console.log("hello index");
   
 
   if (req.user) {
