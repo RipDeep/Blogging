@@ -5,6 +5,7 @@ const Comment = require("../models/comment");
 const multer = require("multer");
 const path = require("path");
 const Like = require("../models/like");
+const Notification = require("../models/notifications");
 const cloudinary = require("cloudinary").v2;
 
 const router = Router();
@@ -26,7 +27,7 @@ router.get("/:id", async (req, res) => {
     return res.redirect("/login");
   }
 
-  const blog = await Blog.findById(req.params.id).populate("createdBy"); 
+  const blog = await Blog.findById(req.params.id).populate("createdBy");
 
   if (!blog) {
     return res.status(404).send("Blog not found");
@@ -86,12 +87,35 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/comment/:blogId", async (req, res) => {
-  await Comment.create({
-    content: req.body.content,
-    blogId: req.params.blogId,
-    createdBy: req.user._id,
-  });
-  return res.redirect(`/blog/${req.params.blogId}`);
+  try {
+    const blogId = req.params.blogId;
+    const userId = req.user._id;
+
+    await Comment.create({
+      content: req.body.content,
+      blogId: req.params.blogId,
+      createdBy: req.user._id,
+    });
+
+    const blog = await Blog.findById(blogId).populate("createdBy");
+
+    const currentUser = await User.findById(userId);
+
+    if (blog && blog.createdBy._id.toString() !== req.user._id.toString()) {
+      await Notification.create({
+        user: blog.createdBy._id, // blog owner
+        sender: req.user._id, // commenter
+        type: "comment",
+        blog: blog._id,
+        message: `${currentUser.fullName} commented on your blog "${blog.title}"`,
+      });
+    }
+
+    return res.redirect(`/blog/${req.params.blogId}`);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Server Error");
+  }
 });
 
 router.post("/like/:blogId", async (req, res) => {
@@ -101,6 +125,15 @@ router.post("/like/:blogId", async (req, res) => {
 
     // Check if the user already liked the blog
     let like = await Like.findOne({ blogId, createdBy: userId });
+    const currentUser = await User.findById(userId);
+
+    const blog = await Blog.findById(blogId).populate("createdBy", "fullName");
+
+    if (!blog) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Blog not found" });
+    }
 
     if (like) {
       // User unlikes
@@ -112,6 +145,17 @@ router.post("/like/:blogId", async (req, res) => {
 
     // Count total likes for this blog
     const likesCount = await Like.countDocuments({ blogId });
+
+    // inside your like controller
+    if (blog.createdBy._id.toString() !== userId.toString()) {
+      await Notification.create({
+        user: blog.createdBy._id, // blog owner
+        sender: userId,
+        type: "like",
+        blog: blog._id,
+        message: `${currentUser.fullName} liked your blog "${blog.title}"`,
+      });
+    }
 
     return res.redirect(`/blog/${req.params.blogId}`);
   } catch (err) {
@@ -138,6 +182,24 @@ router.post("/add-new", async (req, res) => {
       createdBy: req.user._id,
       coverImageURL: result.secure_url,
     });
+
+    const user = await User.findById(req.user._id);
+
+    const userWithFollowers = await User.findById(req.user._id).populate(
+      "followers"
+    );
+    if (userWithFollowers && userWithFollowers.followers.length > 0) {
+      for (const follower of userWithFollowers.followers) {
+        await Notification.create({
+          user: follower._id, // follower is a User object after populate
+          sender: req.user._id,
+          type: "post",
+          blog: blog._id,
+          message: `${user.fullName} posted a new blog "${blog.title}"`,
+        });
+      }
+    }
+
     return res.redirect(`/blog/${blog._id}`);
   } catch (error) {
     console.error("Error in /add-new:", error);

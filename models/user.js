@@ -29,7 +29,7 @@ const userSchema = new Schema(
       enum: ["USER", "ADMIN"],
       default: "USER",
     },
-    followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    followers: [{ type: Schema.Types.ObjectId, ref: "user" }],
     profileViews: {
       type: Number,
       default: 0,

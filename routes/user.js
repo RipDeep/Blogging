@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const User = require("../models/user");
+const Notification = require("../models/notifications");
 
 const router = Router();
 
@@ -99,5 +100,22 @@ router.post("/signup", async (req, res) => {
     });
   }
 });
+
+
+
+
+// routes/notification.js
+router.post('/mark-read/:id', async (req, res) => {
+  try {
+    await Notification.findByIdAndUpdate(req.params.id, { read: true });
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+});
+
+
+
 
 module.exports = router;

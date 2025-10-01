@@ -9,11 +9,8 @@
       aria-controls="navbarNavDropdown"
       aria-expanded="false"
       aria-label="Toggle navigation"
-      
     >
-      <span class="navbar-toggler-icon">
-       
-      </span>
+      <span class="navbar-toggler-icon"> </span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -21,31 +18,92 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
-
-        <% if (locals.user) { %>
-          <li class="nav-item">
-            <a class="nav-link" href="/blog/add-new">Add Blog</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link "
-              href="#"
-              id="navbarDropdownMenuLink"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+<% if (locals.user) { %>
+        
+        <li class="nav-item">
+          <!-- Notification Bell -->
+          <a
+            class="nav-link position-relative"
+            href="#"
+             id="notifIcon"
+            data-bs-toggle="modal"
+            data-bs-target="#notifModal"
+          >
+            Notifications 🔔 <% if (locals.unreadCount > 0) { %>
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
             >
-              <h6 id="username-display"><%= locals.user.fullName %></h6>
-              <span class="dropdown-toggle"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/profile/">Profile</a></li>
-              <li><a class="dropdown-item" id="logout" href="/user/logout">Logout</a></li>
-            </ul>
-          </li>
+              <%= locals.unreadCount %>
+            </span>
+            <% } %>
+          </a>
+          <% } %>
+
+         <!-- Custom Notification Modal -->
+<div class="custom-notif-modal" id="customNotifModal">
+  <div class="custom-notif-content">
+    <span class="custom-close-btn" id="closeNotifModal">&times;</span>
+    <h2>Notifications</h2>
+
+    <div class="custom-notif-body">
+      <% if (locals.notifications.length > 0) { %>
+        <% locals.notifications.forEach(n => { %>
+          <div
+            class="custom-notif-item <%= n.read ? 'read' : 'unread' %>"
+            data-id="<%= n._id %>"
+            data-url="<%= (n.type === 'post' || n.type === 'comment' || n.type === 'like') ? '/blog/' + n.blog._id.toString() : '/profile/view/' + n.sender._id %>"
+            style="cursor: pointer"
+          >
+            <img src="<%= n.sender.profileImageURL || '/default-avatar.png' %>" alt="Sender" class="notif-sender-img" />
+            <div class="notif-text">
+              <div class="notif-message"><%= n.message %></div>
+              <small class="notif-date"><%= n.createdAt.toDateString() %></small>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="text-muted">No notifications</div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+
+          <% if (locals.user) { %>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/blog/add-new">Add Blog</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link"
+            href="#"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <h6 id="username-display"><%= locals.user.fullName %></h6>
+            <span class="dropdown-toggle"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/profile/">Profile</a></li>
+            <li>
+              <a class="dropdown-item" id="logout" href="/user/logout"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </li>
         <% } else { %>
-          <li class="nav-item"><a class="nav-link" href="/user/signin">Signin</a></li>
-          <li class="nav-item"><a class="nav-link" href="/user/signup">Create Account</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signin">Signin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signup">Create Account</a>
+        </li>
         <% } %>
       </ul>
     </div>

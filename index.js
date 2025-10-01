@@ -7,6 +7,9 @@ const cookieParser = require("cookie-parser");
 const fileuplod = require("express-fileupload");
 
 const Blog = require("./models/blog");
+const Notification = require("../Blogging/models/notifications");
+const User = require("./models/user");      
+
 
 const userRoute = require("./routes/user");
 const blogRoute = require("./routes/blog");
@@ -35,10 +38,11 @@ app.set("views", path.resolve("./views"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
-// app.use((req, res, next) => {
-//   res.locals.user = req.user; // now home page and navbar can access user
-//   next();
-// });
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user || null;  // make currentUser global
+  next();
+});
+
 app.use(express.static(path.resolve("./public")));
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 app.use(
@@ -48,11 +52,56 @@ app.use(
   })
 );
 
+app.use(async (req, res, next) => {
+  if (req.user) {
+    try {
+      // fetch notifications for logged in user
+      const notifications = await Notification.find({ user: req.user._id })
+        .populate("sender blog")
+        .sort({ createdAt: -1 })
+        .lean();
+
+      const unreadCount = notifications.filter(n => !n.read).length;
+
+      // store globally
+      res.locals.user = req.user;              // current logged-in user
+      res.locals.notifications = notifications; // notifications list
+      res.locals.unreadCount = unreadCount;     // unread badge count
+    } catch (err) {
+      console.error("Error fetching notifications:", err);
+      res.locals.notifications = [];
+      res.locals.unreadCount = 0;
+    }
+  } else {
+    res.locals.user = null;
+    res.locals.notifications = [];
+    res.locals.unreadCount = 0;
+  }
+  next();
+});
+
 app.get("/", async (req, res) => {
   const allBlog = await Blog.find({});
+
+  let notifications = [];
+  let unreadCount = 0;
+  console.log("hello index");
+  
+
+  if (req.user) {
+      // Fetch notifications for the logged-in user
+      notifications = await Notification.find({ user: req.user._id })
+        .populate("sender blog")
+        .sort({ createdAt: -1 })
+        .lean();
+
+      unreadCount = notifications.filter(n => !n.read).length;
+    }
   res.render("home", {
     user: req.user,
     blogs: allBlog,
+    notifications,
+    unreadCount
   });
 });
 

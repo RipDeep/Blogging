@@ -4,6 +4,9 @@
   crossorigin="anonymous"
 ></script>
 <script>
+  
+  console.log("hello");
+
   // get the cookie value
   function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -19,19 +22,76 @@
     document.getElementById("username-display").innerText = username;
   }
 
+  function showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`; // add type-specific style
+    toast.innerText = message;
+    document.body.appendChild(toast);
 
-    function showToast(message, type = "info") {
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`; // add type-specific style
-  toast.innerText = message;
-  document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add("show"), 100);
 
-  setTimeout(() => toast.classList.add("show"), 100);
+    setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => toast.remove(), 400);
+    }, 2000);
+  }
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-    setTimeout(() => toast.remove(), 400);
-  }, 2000);
-}
-  
+  document.getElementById("notifDropdown").addEventListener("click", () => {
+    fetch("/notifications/mark-read", { method: "POST" });
+  });
+
+  const notifModalVal = document.querySelector("#notifModal");
+
+   document.addEventListener("DOMContentLoaded", () => {
+  // Event delegation for notification items
+  document.addEventListener("click", async function (e) {
+    const notifItem = e.target.closest(".notif-item");
+    if (!notifItem) return;
+
+    const url = notifItem.dataset.url;
+    const notifId = notifItem.dataset.id;
+
+    if (!notifId) return;
+
+    // Mark as read in backend
+    try {
+      await fetch(`/notifications/read/${notifId}`, { method: "POST" });
+    } catch (err) {
+      console.error("Failed to mark notification as read", err);
+    }
+
+    // Update style
+    notifItem.classList.remove("bg-primary", "text-white");
+    notifItem.classList.add("bg-light");
+
+    // Update unread badge
+    const badge = document.querySelector(".nav-link .badge");
+    if (badge) {
+      let count = parseInt(badge.textContent) || 0;
+      count = Math.max(count - 1, 0);
+      badge.textContent = count;
+      if (count === 0) badge.style.display = "none";
+    }
+
+    // Close modal
+    const modalEl = document.getElementById("notifModal");
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.hide();
+
+    // Redirect to blog or profile
+    if (url && url !== "#") {
+      window.location.href = url;
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
+
 </script>

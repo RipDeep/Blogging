@@ -1,0 +1,76 @@
+<script>
+
+    
+document.addEventListener("DOMContentLoaded", () => {
+  // Event delegation for notification items
+  document.addEventListener("click", async function (e) {
+    const notifItem = e.target.closest(".custom-notif-item"); // updated class
+    if (!notifItem) return;
+
+    const url = notifItem.dataset.url;
+    const notifId = notifItem.dataset.id;
+
+    if (!notifId) return;
+
+    console.log("NOTIFICATION ID:", notifId);
+
+    // Mark as read in backend
+    try {
+      await fetch(`/user/mark-read/${notifId}`, { method: "POST" });
+    } catch (err) {
+      console.error("Failed to mark notification as read", err);
+    }
+
+    // Update style
+    notifItem.classList.remove("bg-unread"); // previous unread class
+    notifItem.classList.add("bg-read");      // new read class
+
+    // Update unread badge
+    const badge = document.querySelector(".nav-link .badge");
+    if (badge) {
+      let count = parseInt(badge.textContent) || 0;
+      count = Math.max(count - 1, 0);
+      badge.textContent = count;
+      if (count === 0) badge.style.display = "none";
+    }
+
+    // Close modal
+    const notifModal = document.getElementById("customNotifModal");
+    notifModal.style.display = "none";
+
+    // Redirect to blog or profile
+    if (url && url !== "#") {
+      window.location.href = url;
+    }
+  });
+});
+
+const notifIcon = document.getElementById("notifIcon");
+const notifModal = document.querySelector(".custom-notif-modal "); // match HTML ID
+const closeNotifBtn = document.querySelector("#customNotifModal .custom-close-btn");
+
+
+// Open modal when clicking the bell
+notifIcon.addEventListener("click", (e) => {
+  e.preventDefault();
+  notifModal.style.display = "flex";
+
+
+   
+});
+
+// Close modal when clicking close button
+closeNotifBtn.addEventListener("click", () => {
+  notifModal.style.display = "none";
+});
+
+// Close modal when clicking outside content
+window.addEventListener("click", (e) => {
+  if (e.target === notifModal) {
+    notifModal.style.display = "none";
+  }
+});
+
+
+    
+</script>

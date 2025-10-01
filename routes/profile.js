@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Blog = require("../models/blog");
+const Notification = require("../models/notifications");
 const User = require("../models/user");
 const cloudinary = require("cloudinary").v2;
 
@@ -30,6 +31,8 @@ router.get("/", async (req, res) => {
         ? await User.find({ _id: { $in: followerIds } })
         : [];
 
+
+
     return res.render("profile", {
       userDetails,
       user: req.user,
@@ -52,11 +55,10 @@ router.get("/view/:id", async (req, res) => {
   if (!userDetails) {
     return res.status(404).send("User not found");
   }
-  
-  const followerIds = userDetails[0].followers.map((f) => f.toString());
-  
-  const user = await User.findById(userId);
 
+  const followerIds = userDetails[0].followers.map((f) => f.toString());
+
+  const user = await User.findById(userId);
 
   let shouldIncrement = false;
   if (!req.user) {
@@ -64,7 +66,6 @@ router.get("/view/:id", async (req, res) => {
   } else if (req.user._id.toString() !== user._id.toString()) {
     shouldIncrement = true;
   }
-
 
   const now = new Date();
   if (
@@ -80,31 +81,37 @@ router.get("/view/:id", async (req, res) => {
     userDetails[0].lastResetProfileViews = now;
   }
 
-  
-
-  
-
   if (shouldIncrement) {
     await User.updateOne({ _id: userId }, { $inc: { profileViews: 1 } });
     userDetails.profileViews += 1; // keep in sync for rendering
   }
-
-  
 
   const followersData =
     followerIds.length > 0
       ? await User.find({ _id: { $in: followerIds } })
       : [];
 
+  const notifications = req.user
+    ? await Notification.find({ user: req.user._id })
+        .populate("sender blog")
+        .sort({ createdAt: -1 })
+        .lean()
+    : [];
+
+    
   if (!userDetails) return res.status(404).send("User not found");
 
   // Fetch that user's posts
   const userPosts = await Blog.find({ createdBy: userId });
+  console.log("notifications", );
+  
 
   res.render("profile", {
     userDetails, // the profile being viewed
     user: req.user, // currently logged-in user
     userPosts,
+    currentUser: req.user,     // ✅ so nav.ejs can use this
+    notifications,             // ✅ so nav.ejs won’t crash
     totalPosts: userPosts.length,
     followersData: followersData ? followersData : [],
   });
@@ -140,6 +147,25 @@ router.post("/follow/:id", async (req, res) => {
         $addToSet: { followers: currentUserId },
       });
     }
+
+    const currentUser = await User.findById(currentUserId);
+
+    if (!isFollowing) { // only when following
+  // Follow: add currentUserId to followers
+  await User.findByIdAndUpdate(targetUserId, {
+    $addToSet: { followers: currentUserId },
+  });
+
+  // Notification for follow
+  if (targetUser._id.toString() !== req.user._id.toString()) {
+    await Notification.create({
+      user: targetUser._id,   // ✅ corrected
+      sender: currentUserId,
+      type: "follow",
+      message: `${currentUser.fullName} started following you`
+    });
+  }
+}
 
     return res.redirect(`/profile/view/${targetUserId}`);
   } catch (err) {
